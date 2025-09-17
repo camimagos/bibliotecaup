@@ -34,7 +34,7 @@ func main() {
 	// }
 	ctx := context.Background()
 	instanceID := discovery.GenerateInstanceID(serviceName)
-	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {
+	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("reservation:%d", port)); err != nil {
 		log.Printf("Error registering service in Consul: %v", err)
 		panic(err)
 	}

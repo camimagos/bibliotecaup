@@ -17,6 +17,8 @@ services:
     container_name: cubicle
     depends_on:
       - consul
+      - metadata
+      - reservation
     environment:
       - CONSUL_HTTP_ADDR=http://consul:8500
     ports:

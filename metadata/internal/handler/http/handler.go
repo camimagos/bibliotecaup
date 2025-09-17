@@ -8,6 +8,7 @@ import (
 
 	"bibliotecaup.com/metadata/internal/controller/metadata"
 	repository "bibliotecaup.com/metadata/internal/repository"
+	model "bibliotecaup.com/metadata/pkg"
 )
 
 type Handler struct {
@@ -38,4 +39,22 @@ func (h *Handler) GetMetadata(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(m); err != nil {
 		log.Printf("failed to encode metadata response: %v", err)
 	}
+}
+
+func (h *Handler) CreateMetadata(w http.ResponseWriter, r *http.Request) {
+	var metadata model.Metadata
+	if err := json.NewDecoder(r.Body).Decode(&metadata); err != nil {
+		log.Printf("failed to decode metadata: %v", err)
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	ctx := r.Context()
+	if err := h.controller.Create(ctx, &metadata); err != nil {
+		log.Printf("failed to create metadata: %v", err)
+		http.Error(w, "Failed to create metadata", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 }

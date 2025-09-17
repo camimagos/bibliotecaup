@@ -2,6 +2,7 @@ package memory
 
 import (
 	"context"
+	"log"
 
 	"bibliotecaup.com/reservation/internal/repository"
 	"bibliotecaup.com/reservation/pkg/model"
@@ -13,7 +14,8 @@ type Repository struct {
 
 func New() *Repository {
 	return &Repository{
-		map[model.RecordType]map[model.RecordID][]model.Reservation{},
+		//map[model.RecordType]map[model.RecordID][]model.Reservation{},
+		data: make(map[model.RecordType]map[model.RecordID][]model.Reservation),
 	}
 }
 
@@ -34,5 +36,6 @@ func (r *Repository) Put(ctx context.Context, recordID model.RecordID, recordTyp
 		r.data[recordType] = map[model.RecordID][]model.Reservation{}
 	}
 	r.data[recordType][recordID] = append(r.data[recordType][recordID], *reservation)
+	log.Printf("Reservation saved: %+v", reservation)
 	return nil
 }

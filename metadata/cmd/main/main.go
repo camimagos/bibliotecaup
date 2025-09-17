@@ -44,7 +44,16 @@ func main() {
 	c := metadata.New(r)
 	h := httphandler.New(c)
 
-	http.Handle("/metadata", http.HandlerFunc(h.GetMetadata))
+	http.Handle("/metadata", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			h.GetMetadata(w, r)
+		case http.MethodPost:
+			h.CreateMetadata(w, r)
+		default:
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	}))
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
 		panic(err)
 	}

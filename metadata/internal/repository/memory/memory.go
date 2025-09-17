@@ -26,3 +26,8 @@ func (r *Repository) Get(ctx context.Context, id string) (*model.Metadata, error
 	}
 	return nil, fmt.Errorf("metadata not found")
 }
+
+func (r *Repository) Put(ctx context.Context, metadata *model.Metadata) error {
+	r.data[metadata.CubicleID] = metadata
+	return nil
+}

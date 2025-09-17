@@ -22,3 +22,8 @@ require (
 	golang.org/x/exp v0.0.0-20250808145144-a408d31f581a // indirect
 	golang.org/x/sys v0.35.0 // indirect
 )
+
+replace bibliotecaup.com/pkg => ./pkg
+replace bibliotecaup.com/cubicle => ./cubicle
+replace bibliotecaup.com/metadata => ./metadata
+replace bibliotecaup.com/reservation => ./reservation

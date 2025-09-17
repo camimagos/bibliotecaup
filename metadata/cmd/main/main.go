@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"bibliotecaup.com/metadata/internal/controller/metadata"
@@ -22,10 +23,14 @@ func main() {
 	flag.IntVar(&port, "port", 8081, "API handler port")
 	flag.Parse()
 	log.Printf("Starting metadata service on port %d", port)
-	registry, err := consul.NewRegistry("localhost:8500")
+	registry, err := consul.NewRegistry(os.Getenv("CONSUL_HTTP_ADDR"))
 	if err != nil {
-		panic(err)
+		log.Fatalf("Error creating Consul registry: %v", err)
 	}
+	// registry, err := consul.NewRegistry("localhost:8500")
+	// if err != nil {
+	// 	panic(err)
+	// }
 	ctx := context.Background()
 	instanceID := discovery.GenerateInstanceID(serviceName)
 	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {

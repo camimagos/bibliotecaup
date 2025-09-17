@@ -1,0 +1,15 @@
+FROM golang:1.25 AS builder
+
+WORKDIR /app
+COPY . .
+RUN go mod tidy
+
+WORKDIR /app/cubicle/cmd/main
+RUN go build -o /app/cubicle/cubicle .
+
+FROM debian:bookworm-slim
+WORKDIR /app
+COPY --from=builder /app/cubicle/cubicle .
+
+EXPOSE 8083
+CMD ["./cubicle"]

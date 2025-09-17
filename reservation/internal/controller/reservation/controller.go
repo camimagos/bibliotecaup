@@ -30,7 +30,7 @@ func (c *Controller) Reservation(ctx context.Context, id model.RecordID, t model
 	if errors.Is(err, ErrNotFound) {
 		return &model.Availability{
 			AvailableNow:  true,
-			NextAvailable: time.Now(),
+			NextAvailable: time.Time{},
 		}, nil
 	}
 	if err != nil {

@@ -14,7 +14,7 @@ import (
 var ErrNotFound = errors.New("cubicle: not found")
 
 type reservationGateway interface {
-	GetAggregatedReservation(ctx context.Context, recordID reservationModel.RecordID, recordType reservationModel.RecordType) (*reservationModel.Availability, error)
+	GetAvailability(ctx context.Context, recordID reservationModel.RecordID, recordType reservationModel.RecordType) (*reservationModel.Availability, error)
 	PutReservation(ctx context.Context, recordID reservationModel.RecordID, recordType reservationModel.RecordType, reservation *reservationModel.Reservation) error
 }
 
@@ -44,7 +44,7 @@ func (c *Controller) Get(ctx context.Context, id string) (*model.CubicleDetails,
 	details := &model.CubicleDetails{Metadata: *metadata}
 
 	// Obtener la disponibilidad agregada de las reservaciones
-	availability, err := c.reservationGateway.GetAggregatedReservation(ctx, reservationModel.RecordID(id), reservationModel.RecordTypeCubicle)
+	availability, err := c.reservationGateway.GetAvailability(ctx, reservationModel.RecordID(id), reservationModel.RecordTypeCubicle)
 	if err != nil && errors.Is(err, gateway.ErrNotFound) {
 		log.Printf("No availability found for cubicle ID %s", id)
 	} else if err != nil {

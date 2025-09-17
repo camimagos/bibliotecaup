@@ -26,10 +26,10 @@ func (g *Gateway) PutReservation(ctx context.Context, recordID model.RecordID, r
 
 	// Construir la URL del servicio de reservaciones
 	url := "http://" + addrs[rand.Intn(len(addrs))] + "/reservation"
-	log.Printf("Calling reservation service, request: PUT %s", url)
+	log.Printf("Calling reservation service, request: POST %s", url)
 
-	// Crear la solicitud HTTP PUT
-	req, err := http.NewRequest(http.MethodPut, url, nil)
+	// Crear la solicitud HTTP POST
+	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return err
 	}
@@ -60,7 +60,7 @@ func (g *Gateway) PutReservation(ctx context.Context, recordID model.RecordID, r
 	return nil
 }
 
-func (g *Gateway) GetAggregatedReservation(ctx context.Context, recordID model.RecordID, recordType model.RecordType) (*model.Availability, error) {
+func (g *Gateway) GetAvailability(ctx context.Context, recordID model.RecordID, recordType model.RecordType) (*model.Availability, error) {
 	addrs, err := g.registry.ServiceAddress(ctx, "reservation")
 	if err != nil {
 		return nil, err
@@ -73,8 +73,8 @@ func (g *Gateway) GetAggregatedReservation(ctx context.Context, recordID model.R
 	}
 	req = req.WithContext(ctx)
 	values := req.URL.Query()
-	values.Add("id", string(recordID))
-	values.Add("type", fmt.Sprintf("%v", recordType))
+	values.Add("recordId", string(recordID))
+	values.Add("recordType", fmt.Sprintf("%v", recordType))
 	req.URL.RawQuery = values.Encode()
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {

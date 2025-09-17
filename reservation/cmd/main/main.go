@@ -24,11 +24,13 @@ func main() {
 	log.Printf("Starting reservation service on port %d", port)
 	registry, err := consul.NewRegistry("localhost:8500")
 	if err != nil {
+		log.Printf("Error creating Consul registry: %v", err)
 		panic(err)
 	}
 	ctx := context.Background()
 	instanceID := discovery.GenerateInstanceID(serviceName)
 	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {
+		log.Printf("Error registering service in Consul: %v", err)
 		panic(err)
 	}
 	go func() {
@@ -45,6 +47,7 @@ func main() {
 	h := httpHandler.New(ctrl)
 	http.Handle("/reservation", http.HandlerFunc(h.Handle))
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
+		log.Printf("Error starting HTTP server: %v", err)
 		panic(err)
 	}
 }

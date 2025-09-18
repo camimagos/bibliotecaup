@@ -19,49 +19,7 @@ func New(ctrl *reservation.Controller) *Handler {
 }
 
 func (h *Handler) Handle(w http.ResponseWriter, req *http.Request) {
-	//log.Printf("Received request: Method=%s, Path=%s", req.Method, req.URL.Path)
-
-	// recordID := model.RecordID(req.FormValue("id"))
-
-	// if recordID == "" {
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	return
-	// }
-	// recordType := model.RecordType(req.FormValue("type"))
-	// if recordType == "" {
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	return
-	// }
-
 	switch req.Method {
-	// case http.MethodPost: // Crear una reservación
-	// 	if err := req.ParseForm(); err != nil {
-	// 		log.Printf("Error parsing form: %v", err)
-	// 		http.Error(w, "Invalid form data", http.StatusBadRequest)
-	// 		return
-	// 	}
-
-	// 	res := &model.Reservation{
-	// 		RecordID:   model.RecordID(req.Form.Get("recordId")),
-	// 		RecordType: model.RecordType(req.Form.Get("recordType")),
-	// 		UserID:     model.UserID(req.Form.Get("userId")),
-	// 		Start:      parseTime(req.Form.Get("start")),
-	// 		End:        parseTime(req.Form.Get("end")),
-	// 		Status:     model.Status(req.Form.Get("status")),
-	// 	}
-
-	// 	if err := h.ctrl.PutReservation(req.Context(), res.RecordID, res.RecordType, res); err != nil {
-	// 		log.Printf("Error creating reservation: %v", err)
-	// 		if errors.Is(err, reservation.ErrInvalidData) {
-	// 			http.Error(w, "Invalid reservation data", http.StatusBadRequest)
-	// 		} else {
-	// 			http.Error(w, "Internal server error", http.StatusInternalServerError)
-	// 		}
-	// 		return
-	// 	}
-
-	// 	w.WriteHeader(http.StatusCreated)
-
 	case http.MethodPost: // Crear una reservación
 		var res model.Reservation
 		if err := json.NewDecoder(req.Body).Decode(&res); err != nil {
